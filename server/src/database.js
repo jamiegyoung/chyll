@@ -12,7 +12,14 @@ const connection = mysql.createConnection({
   database: config.db.database,
 });
 
-connection.connect();
+connection.connect((err) => {
+  if (err) {
+    console.error("Error connecting: " + err.stack);
+    return;
+  }
+
+  console.log("connected as id " + connection.threadId);
+});
 
 const getUser = (userId) => _getUser(SHA3(userId).toString());
 
@@ -23,7 +30,6 @@ const _getUser = (userId) => {
       [userId],
       (err, res) => {
         if (err) reject(err);
-        if (!res) resolve(false);
         if (res.length === 0) resolve(false);
         const decryptedRes = res.map((val) => {
           val["access_token"] = AES.decrypt(
@@ -133,7 +139,6 @@ const getUserCount = () =>
       "SELECT COUNT(*) FROM `spotify_info` WHERE `playlist_id` IS NOT NULL ",
       (err, res) => {
         if (err) reject(err);
-        if (!res) reject("no result");
         resolve(res[0]["COUNT(*)"]);
       }
     );
@@ -145,7 +150,6 @@ const getAllPlaylists = () =>
       "SELECT * FROM `spotify_info` WHERE `playlist_id` IS NOT NULL",
       (err, res) => {
         if (err) reject(err);
-        if (!res) reject("no res");
         const decryptedRes = res.map((val) => {
           val["access_token"] = AES.decrypt(
             val["access_token"],
