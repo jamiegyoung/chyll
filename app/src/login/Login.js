@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import bgVideo from "../media/bg.mp4";
 import Logo from "../common/Logo/Logo";
 import FooterBar from "../common/FooterBar/FooterBar"
-import styles from "./Login.module.css";
 import useFetch from "../common/useFetch";
-
+import styles from "./Login.module.css";
+import commonStyles from "../common/Common.module.css";
 
 const Login = () => {
   const userCountRes = useFetch("/api/v1/user_count");
@@ -39,7 +39,7 @@ const Login = () => {
           </div>
           <div className={styles.subtextContainer}>
             <p className={styles.subtext}>
-              lofi beats added daily <span className={styles.avoidwrap}>(17:00 UTC)</span> to a playlist of your choosing
+              lofi beats added daily <span className={commonStyles.avoidwrap}>(17:00 UTC)</span> to a playlist of your choosing
             </p>
             <p
               className={styles.subtext}

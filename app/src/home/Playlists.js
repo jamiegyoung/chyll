@@ -4,6 +4,7 @@ import Spinner from "../common/Spinner/Spinner";
 import StartButton from "./StartButton/StartButton";
 import useFetch from "../common/useFetch";
 import styles from "./Playlists.module.css";
+import commonStyles from "../common/Common.module.css";
 
 const Playlists = () => {
   const playlistRes = useFetch("/api/v1/get_playlists");
@@ -92,34 +93,41 @@ const Playlists = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <p className={styles.text}>now we're here,</p>
-      <p
-        className={styles.text}
-        style={{
-          marginBottom: "20px",
-        }}
-      >
-        select a playlist to add some vibes to:
-      </p>
-      <div className={styles.selectContainer}>
-        {/* If there is no playlist, display a loading spinner */}
-        {playlistRes.response ? (
-          <Select
-            onChange={handleSelectChange}
-            styles={selectStyle}
-            value={selected}
-            options={playlistRes.response.available}
-          ></Select>
-        ) : (
-          <Spinner></Spinner>
-        )}
+    <div className={styles.outerContainer}>
+      <div className={styles.container}>
+        <p className={styles.text}>now we're here,</p>
+        <p
+          className={styles.text}
+          style={{
+            marginBottom: "20px",
+          }}
+        >
+          select a playlist to add some vibes to:
+        </p>
+        <div className={styles.selectContainer}>
+          {/* If there is no playlist, display a loading spinner */}
+          {playlistRes.response ? (
+            <Select
+              onChange={handleSelectChange}
+              styles={selectStyle}
+              value={selected}
+              options={playlistRes.response.available}
+            ></Select>
+          ) : (
+            <Spinner></Spinner>
+          )}
+        </div>
+        <StartButton
+          onClick={handleStartClick}
+          enabled={enabled}
+          disabled={!selected}
+        ></StartButton>
+        <p>
+          lofi beats added daily{" "}
+          <span className={commonStyles.avoidwrap}>(17:00 UTC)</span> to a
+          playlist of your choosing
+        </p>
       </div>
-      <StartButton
-        onClick={handleStartClick}
-        enabled={enabled}
-        disabled={!selected}
-      ></StartButton>
     </div>
   );
 };
