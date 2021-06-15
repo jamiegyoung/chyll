@@ -21,7 +21,8 @@ app.use(
     keys: config.cookies.keys,
     maxAge: 24 * 60 * 60 * 1000,
     httpOnly: true,
-    // secure: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
   })
 );
 
