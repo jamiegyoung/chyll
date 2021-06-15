@@ -2,8 +2,10 @@ import BackgroundVideo from "../common/BackgroundVideo/BackgroundVideo";
 import React, { useEffect, useState } from "react";
 import bgVideo from "../media/bg.mp4";
 import Logo from "../common/Logo/Logo";
+import FooterBar from "../common/FooterBar/FooterBar"
 import styles from "./Login.module.css";
 import useFetch from "../common/useFetch";
+
 
 const Login = () => {
   const userCountRes = useFetch("/api/v1/user_count");
@@ -51,6 +53,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+      <FooterBar></FooterBar>
     </div>
   );
 };
