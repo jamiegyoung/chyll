@@ -1,0 +1,8 @@
+.container {
+  color: white;
+  z-index: 1;
+  position: absolute;
+  font-size: 24px;
+  left: 20%;
+  top: 20%;
+}

@@ -1,0 +1,36 @@
+.startButton {
+  background-color: #202126;
+  border: 4px solid;
+  border-color: #3cb546;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 24px;
+  font-family: serif;
+  color: #b6b6d9;
+  margin: 20px;
+  cursor: pointer;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  transition: all 0.2s ease-out;
+}
+
+.enabled {
+  border-color: #b53c3c;
+}
+
+.startButton:focus {
+  outline: none;
+}
+
+.startButton:hover {
+  transform: scale(1.05);
+}
+
+.startButton:disabled {
+  border-color: #424242 !important;
+  color: #424242 !important;
+}
+
+.startButton:disabled:hover {
+  transform: scale(1);
+  cursor: not-allowed !important;
+}

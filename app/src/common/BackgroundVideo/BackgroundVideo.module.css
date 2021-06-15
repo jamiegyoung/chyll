@@ -1,0 +1,30 @@
+.video {
+  min-width: 100vw;
+  height: 100vh;
+  position: fixed;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  object-fit: cover;
+}
+
+.fallback {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: #131417;
+}
+
+.loadingCover {
+  min-width: 100vw;
+  height: 100vh;
+  position: fixed;
+  transition: opacity 1s ease-out;
+  background-color: rgb(19, 20, 23);
+  z-index: 1;
+  opacity: 1;
+}
+
+.loadingCover.loaded {
+  opacity: 0;
+}

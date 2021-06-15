@@ -1,0 +1,74 @@
+.loginButtonContainer {
+  transition: all 0.2s ease-out;
+  margin-top: 30px;
+}
+
+.loginButtonContainer:focus {
+  outline: 0px;
+}
+
+.loginButtonContainer:hover {
+  /* cursor: url(../media/heart.png) 17 5, pointer; */
+  transform: scale(1.05);
+}
+
+.loginButton {
+  padding: 10px 40px;
+  font-size: 40px;
+  font-weight: 400;
+  border-radius: 25px;
+  background-color: #202126;
+  color: #b6b6d9;
+  border: none;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  font-family: serif;
+  text-decoration: none;
+}
+
+.loginOuterContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.loginInnerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #131417;
+  width: 90vw;
+  max-width: 400px;
+  min-width: 300px;
+  margin: 20px 10px 20px 10px;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  color: #b6b6d9;
+  font-size: 20px;
+  z-index: 1;
+  height: 450px;
+}
+
+.text {
+  margin: 0;
+}
+
+.subtextContainer {
+  width: 80%;
+  margin: 15px 0 0 0;
+}
+
+.subtext {
+  text-align: center;
+  font-size: 16px;
+  padding: 20px 30px 20px 30px;
+  margin: 0 0 0 0;
+  color: #9da1b3;
+  font-family: sans-serif;
+  transition: opacity 0.6s ease-out;
+}
+
+.avoidwrap {
+  display: inline-block;
+}
