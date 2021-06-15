@@ -1,5 +1,11 @@
 # Chyll
-## Server setup
+Add some chyll to your playlist
+
+[![](https://i.imgur.com/5qOkUwv.jpg)](https://i.imgur.com/YrvdCKI.mp4)
+
+A website that adds lofi beats (daily 17:00 UTC) to a spotify playlist of your choosing.
+
+## Setup
 1. Within `app/` run
 ```sh
 yarn
@@ -14,7 +20,13 @@ yarn build
 ```sh
 yarn
 ```
-1. Then start the server with 
+7. Within `server/src/` copy and rename `config-template.json` to `config.json` and insert your details
+
+## Database setup
+A sql file has been provided in order to create the required table
+
+## Usage
+1. Start the server with 
 ```
 yarn start
 ```
