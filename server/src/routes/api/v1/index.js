@@ -1,11 +1,18 @@
 const express = require("express");
+const rateLimit = require("express-rate-limit");
+const { v4: uuidv4 } = require("uuid");
 const SpotifyClient = require("../../../spotify");
 const config = require("../../../config.json");
 const db = require("../../../database");
-const { v4: uuidv4 } = require("uuid");
 const { checkAccess } = require("../../../middleware");
 
 const router = express.Router();
+
+// 200 requests per minute
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
 
 const getPlaylists = async (userId, accessToken, refreshToken) => {
   const loggedInClient = new SpotifyClient(
@@ -30,7 +37,7 @@ const getPlaylists = async (userId, accessToken, refreshToken) => {
   return cleanPlaylists;
 };
 
-router.get("/submit_login", async (req, res) => {
+router.get("/submit_login", apiLimiter, async (req, res) => {
   const spotifyClient = new SpotifyClient(
     config.spotify.client_id,
     config.spotify.client_secret,
@@ -43,7 +50,7 @@ router.get("/submit_login", async (req, res) => {
   res.redirect(spotifyClient.getAuthUrl(state));
 });
 
-router.get("/callback", async (req, res) => {
+router.get("/callback", apiLimiter, async (req, res) => {
   if (req.session.client_state !== req.query.state) {
     return res.status(401).redirect("/login");
   }
@@ -87,7 +94,7 @@ router.get("/callback", async (req, res) => {
 
 router.use(express.json());
 
-router.post("/set_playlist", checkAccess, async (req, res) => {
+router.post("/set_playlist", apiLimiter, checkAccess, async (req, res) => {
   if (req.body) {
     if (!req.body.value) return;
     const playlistFound = (
@@ -107,12 +114,12 @@ router.post("/set_playlist", checkAccess, async (req, res) => {
   res.sendStatus(403);
 });
 
-router.get("/remove_playlist", checkAccess, (req, res) => {
+router.get("/remove_playlist", apiLimiter, checkAccess, (req, res) => {
   db.setUserPlaylist(req.session.userId, null);
   res.sendStatus(200);
 });
 
-router.get("/get_playlists", checkAccess, async (req, res) => {
+router.get("/get_playlists", apiLimiter, checkAccess, async (req, res) => {
   const cleanPlaylists = await getPlaylists(
     req.session.userId,
     req.session.access_token,
@@ -130,8 +137,8 @@ router.get("/get_playlists", checkAccess, async (req, res) => {
   res.json({ available: cleanPlaylists });
 });
 
-router.get("/user_count", async (_req, res) => {
-  res.json({ count: await db.getUserCount() })
-})
+router.get("/user_count", apiLimiter, async (_req, res) => {
+  res.json({ count: await db.getUserCount() });
+});
 
 module.exports = router;
