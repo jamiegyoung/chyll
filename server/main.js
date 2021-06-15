@@ -9,6 +9,8 @@ const { checkAccess } = require("./src/middleware");
 
 const { startDailyCheck } = require("./src/dailyCheck");
 
+console.log("NODE_ENV=" + process.env.NODE_ENV);
+
 startDailyCheck();
 
 const app = express();
