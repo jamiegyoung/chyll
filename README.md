@@ -1,7 +1,7 @@
 # Chyll
 Add some chyll to your playlist
 
-[![](https://i.imgur.com/5qOkUwv.jpg)](https://i.imgur.com/YrvdCKI.mp4)
+![](https://i.imgur.com/5qOkUwv.jpg)
 
 A website that adds lofi beats (daily 17:00 UTC) to a spotify playlist of your choosing.
 
