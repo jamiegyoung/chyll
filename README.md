@@ -5,6 +5,8 @@ Add some chyll to your playlist
 
 A website that adds lofi beats (daily 17:00 UTC) to a spotify playlist of your choosing.
 
+Check out the live version [here](https://jamieyoung.tech/)!
+
 ## Setup
 1. Within `app/` run
 ```sh
