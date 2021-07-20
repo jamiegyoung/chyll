@@ -1,10 +1,9 @@
 version: '3.4'
 
 services:
-  chyll-server:
-    image: jamiegyoung22/chyll-server:latest
+  chyll:
+    image: jamiegyoung22/chyll:latest
     build:
-      context: server
       dockerfile: ./Dockerfile
     environment:
       NODE_ENV: production

@@ -26,3 +26,7 @@ README.md
 # Template files
 **/config-template.json
 **/.env.sample
+
+# Previous builds
+server/private
+server/public
