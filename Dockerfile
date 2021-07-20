@@ -1,12 +1,6 @@
-FROM node:16.5.0-alpine
+FROM node:16.5.0-alpine AS app
 ENV NODE_ENV=production
-WORKDIR /usr/src/chyll
-
-# copy server files and install dependencies
-COPY ./server ./
-RUN yarn install --production --silent
-
-WORKDIR /usr/src/chyll/app
+WORKDIR /usr/src/app
 
 # Copy app files and install dependecies
 COPY ./app ./
@@ -16,19 +10,20 @@ ENV GENERATE_SOURCEMAP=false
 ENV INLINE_RUNTIME_CHUNK=false
 RUN yarn install --production --silent && yarn build
 
+FROM node:16.5.0-alpine
+ENV NODE_ENV=production
+
 # Make public and private directories
 WORKDIR /usr/src/chyll
-RUN mkdir ./public
-RUN mkdir ./private
 
-# Move static files to public folder
-RUN mv ./app/build/* ./public/
+# copy server files and install dependencies
+COPY ./server ./
+RUN yarn install --production --silent
 
-# Move index.html to private folder
-RUN mv ./public/index.html ./private/
+RUN  mkdir public && mkdir private 
 
-# Delete app source files
-RUN rm -r ./app
+COPY --from=app /usr/src/app/build/ /usr/src/chyll/public/
+RUN  mv ./public/index.html ./private/
 
 EXPOSE 3000
 CMD ["yarn", "start"]
