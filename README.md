@@ -22,7 +22,7 @@ yarn build
 ```sh
 yarn
 ```
-7. Within `server/src/` copy and rename `config-template.json` to `config.json` and insert your details
+7. Within `server/src/` copy and rename `.env.sample` to `.env` and insert your details
 
 ## Database setup
 A sql file has been provided in order to create the required table

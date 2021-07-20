@@ -23,5 +23,6 @@
 **/values.dev.yaml
 README.md
 
-# Secret config files
-config.json
+# Template files
+**/config-template.json
+**/.env.sample

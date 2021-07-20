@@ -4,7 +4,6 @@ const cookieSession = require("cookie-session");
 const helmet = require("helmet");
 const path = require("path");
 const rateLimit = require("express-rate-limit");
-const config = require("./src/config.json");
 const db = require("./src/database");
 const { checkAccess } = require("./src/middleware");
 
@@ -16,25 +15,14 @@ const app = express();
 
 app.use(helmet());
 
-let getCookieKeys = () => {
-  if (
-    process.env.COOKIE_KEY_1 &&
-    process.env.COOKIE_KEY_2 &&
-    process.env.COOKIE_KEY_3
-  ) {
-    return [
-      process.env.COOKIE_KEY_1,
-      process.env.COOKIE_KEY_2,
-      process.env.COOKIE_KEY_3,
-    ];
-  }
-  return config.cookies.keys;
-};
-
 app.use(
   cookieSession({
     name: "chyllSession",
-    keys: getCookieKeys(),
+    keys: [
+      process.env.COOKIE_KEY_1,
+      process.env.COOKIE_KEY_2,
+      process.env.COOKIE_KEY_3,
+    ],
     maxAge: 24 * 60 * 60 * 1000,
     httpOnly: true,
     sameSite: "lax",

@@ -2,7 +2,6 @@ const express = require("express");
 const rateLimit = require("express-rate-limit");
 const { v4: uuidv4 } = require("uuid");
 const SpotifyClient = require("../../../spotify");
-const config = require("../../../config.json");
 const db = require("../../../database");
 const { checkAccess } = require("../../../middleware");
 
@@ -15,9 +14,8 @@ const apiLimiter = rateLimit({
 });
 
 const spotify = {
-  client_id: process.env.SPOTIFY_CLIENT_ID || config.spotify.client_id,
-  client_secret:
-    process.env.SPOTIFY_CLIENT_SECRET || config.spotify.client_secret,
+  client_id: process.env.SPOTIFY_CLIENT_ID,
+  client_secret: process.env.SPOTIFY_CLIENT_SECRET,
 };
 
 const getPlaylists = async (userId, accessToken, refreshToken) => {
