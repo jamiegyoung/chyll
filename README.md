@@ -9,7 +9,7 @@ Check out the live version [here](https://jamieyoung.tech/)!
 
 ## Setup
 
-## Docker
+### Docker
 Before starting the build, make sure you have populated the `.env` file with the required environment variables localted at server/.env.
 
 ***NOTE:*** If you wish to connect to a local MYSQL database, your `DB_HOST` should be set to `host.docker.internal`
