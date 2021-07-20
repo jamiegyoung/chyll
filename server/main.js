@@ -6,6 +6,7 @@ const path = require("path");
 const rateLimit = require("express-rate-limit");
 const db = require("./src/database");
 const { checkAccess } = require("./src/middleware");
+const csurf = require("csurf");
 
 const { startDailyCheck } = require("./src/dailyCheck");
 
@@ -35,10 +36,16 @@ const frontEndLimiter = rateLimit({
   max: 60,
 });
 
+const csrfMiddleware = csurf({
+  cookie: false,
+});
+
+app.use(csrfMiddleware);
+
 // Cookies last 1 day
 app.use(express.static("public"));
 
-app.use("/api", require("./src/routes/api"));
+app.use("/api", csrfMiddleware, require("./src/routes/api"));
 
 app.get("/login", frontEndLimiter, async (req, res) => {
   if (await db.getUser(req.session.userId)) {
