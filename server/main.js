@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cookieSession = require("cookie-session");
 const helmet = require("helmet");
@@ -9,21 +10,33 @@ const { checkAccess } = require("./src/middleware");
 
 const { startDailyCheck } = require("./src/dailyCheck");
 
-console.log("NODE_ENV=" + process.env.NODE_ENV);
-
 startDailyCheck();
 
 const app = express();
 
 app.use(helmet());
 
+let getCookieKeys = () => {
+  if (
+    process.env.COOKIE_KEY_1 &&
+    process.env.COOKIE_KEY_2 &&
+    process.env.COOKIE_KEY_3
+  ) {
+    return [
+      process.env.COOKIE_KEY_1,
+      process.env.COOKIE_KEY_2,
+      process.env.COOKIE_KEY_3,
+    ];
+  }
+  return config.cookies.keys;
+};
+
 app.use(
   cookieSession({
     name: "chyllSession",
-    keys: config.cookies.keys,
+    keys: getCookieKeys(),
     maxAge: 24 * 60 * 60 * 1000,
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
   })
 );

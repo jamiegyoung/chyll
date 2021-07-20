@@ -6,13 +6,13 @@ const { getAllPlaylists } = require("./database");
 const addSongs = async (accessToken, refreshToken, playlistId, userId) => {
   // create spotify instance
   const loggedInClient = new SpotifyClient(
-    config.spotify.client_id,
-    config.spotify.client_secret,
-    config.spotify.callback_url,
+    process.env.SPOTIFY_CLIENT_ID || config.spotify.client_id,
+    process.env.SPOTIFY_CLIENT_SECRET || config.spotify.client_secret,
+    process.env.SPOTIFY_CALLBACK_URL || config.spotify.callback_url
   );
   await loggedInClient.setTokens(accessToken, refreshToken);
   await loggedInClient.addTracks(
-    config.spotify.source_playlist_id,
+    process.env.SOURCE_PLAYLIST_ID || config.spotify.source_playlist_id,
     playlistId,
     userId
   );

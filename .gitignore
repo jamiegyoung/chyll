@@ -100,3 +100,6 @@ dist
 .tern-port
 .vscode/
 config.json
+
+# dotenv files
+.env

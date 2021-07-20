@@ -14,10 +14,16 @@ const apiLimiter = rateLimit({
   max: 100,
 });
 
+const spotify = {
+  client_id: process.env.SPOTIFY_CLIENT_ID || config.spotify.client_id,
+  client_secret:
+    process.env.SPOTIFY_CLIENT_SECRET || config.spotify.client_secret,
+};
+
 const getPlaylists = async (userId, accessToken, refreshToken) => {
   const loggedInClient = new SpotifyClient(
-    config.spotify.client_id,
-    config.spotify.client_secret,
+    spotify.client_id,
+    spotify.client_secret,
     "https://jamieyoung.tech/api/v1/callback"
   );
 
@@ -39,8 +45,8 @@ const getPlaylists = async (userId, accessToken, refreshToken) => {
 
 router.get("/submit_login", apiLimiter, async (req, res) => {
   const spotifyClient = new SpotifyClient(
-    config.spotify.client_id,
-    config.spotify.client_secret,
+    spotify.client_id,
+    spotify.client_secret,
     "https://jamieyoung.tech/api/v1/callback"
   );
 
@@ -55,8 +61,8 @@ router.get("/callback", apiLimiter, async (req, res) => {
     return res.status(401).redirect("/login");
   }
   const loggedInClient = new SpotifyClient(
-    config.spotify.client_id,
-    config.spotify.client_secret,
+    spotify.client_id,
+    spotify.client_secret,
     "https://jamieyoung.tech/api/v1/callback"
   );
 

@@ -5,11 +5,11 @@ const AES = CryptoJS.AES;
 const SHA3 = CryptoJS.SHA3;
 
 const connection = mysql.createConnection({
-  host: config.db.host,
-  port: config.db.port,
-  user: config.db.user,
-  password: config.db.pass,
-  database: config.db.database,
+  host: process.env.DB_HOST || config.db.host,
+  port: process.env.DB_PORT || config.db.port,
+  user: process.env.DB_USER || config.db.user,
+  password: process.env.DB_PASSWORD || config.db.pass,
+  database: process.env.DB_NAME || config.db.name || config.db.database,
 });
 
 connection.connect((err) => {
@@ -20,6 +20,10 @@ connection.connect((err) => {
 
   console.log("connected as id " + connection.threadId);
 });
+
+// keep backward compatibility for using `encryption_code`
+const encryption_key =
+  process.env.ENCRYPTION_KEY || config.encryption_key || config.encryption_code;
 
 const getUser = (userId) => _getUser(SHA3(userId).toString());
 
@@ -34,18 +38,18 @@ const _getUser = (userId) => {
         const decryptedRes = res.map((val) => {
           val["access_token"] = AES.decrypt(
             val["access_token"],
-            config.encryption_code
+            encryption_key
           ).toString(CryptoJS.enc.Utf8);
 
           val["refresh_token"] = AES.decrypt(
             val["refresh_token"],
-            config.encryption_code
+            encryption_key
           ).toString(CryptoJS.enc.Utf8);
 
           if (val["playlist_id"]) {
             val["playlist_id"] = AES.decrypt(
               val["playlist_id"],
-              config.encryption_code
+              encryption_key
             ).toString(CryptoJS.enc.Utf8);
           }
 
@@ -60,8 +64,8 @@ const _getUser = (userId) => {
 const addUser = (userId, accessToken, refreshToken) =>
   _addUser(
     SHA3(userId).toString(),
-    AES.encrypt(accessToken, config.encryption_code).toString(),
-    AES.encrypt(refreshToken, config.encryption_code).toString()
+    AES.encrypt(accessToken, encryption_key).toString(),
+    AES.encrypt(refreshToken, encryption_key).toString()
   );
 
 const _addUser = (userId, accessToken, refreshToken) =>
@@ -79,8 +83,8 @@ const _addUser = (userId, accessToken, refreshToken) =>
 const updateUser = (userId, accessToken, refreshToken) =>
   _updateUser(
     SHA3(userId).toString(),
-    AES.encrypt(accessToken, config.encryption_code).toString(),
-    AES.encrypt(refreshToken, config.encryption_code).toString()
+    AES.encrypt(accessToken, encryption_key).toString(),
+    AES.encrypt(refreshToken, encryption_key).toString()
   );
 
 const _updateUser = (userId, accessToken, refreshToken) =>
@@ -98,7 +102,7 @@ const _updateUser = (userId, accessToken, refreshToken) =>
 const setUserPlaylist = (userId, playlistId) =>
   _setUserPlaylist(
     SHA3(userId).toString(),
-    AES.encrypt(playlistId, config.encryption_code).toString()
+    AES.encrypt(playlistId, encryption_key).toString()
   );
 
 const _setUserPlaylist = (userId, playlistId) =>
@@ -153,18 +157,18 @@ const getAllPlaylists = () =>
         const decryptedRes = res.map((val) => {
           val["access_token"] = AES.decrypt(
             val["access_token"],
-            config.encryption_code
+            encryption_key
           ).toString(CryptoJS.enc.Utf8);
 
           val["refresh_token"] = AES.decrypt(
             val["refresh_token"],
-            config.encryption_code
+            encryption_key
           ).toString(CryptoJS.enc.Utf8);
 
           if (val["playlist_id"]) {
             val["playlist_id"] = AES.decrypt(
               val["playlist_id"],
-              config.encryption_code
+              encryption_key
             ).toString(CryptoJS.enc.Utf8);
           }
 
