@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cookie-parser": "^1.4.5",
     "cookie-session": "^1.4.0",
     "crypto-js": "^4.0.0",
     "csurf": "^1.11.0",

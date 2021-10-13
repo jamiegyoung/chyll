@@ -5,20 +5,30 @@ import StartButton from "./StartButton/StartButton";
 import useFetch from "../common/useFetch";
 import styles from "./Playlists.module.css";
 import commonStyles from "../common/Common.module.css";
+import useCSRF from "../common/useCSRF";
 
 const Playlists = () => {
   const playlistRes = useFetch("/api/v1/get_playlists");
+  const csrfToken = useCSRF();
 
   const [selected, setSelected] = useState(null);
   const [enabled, setEnabled] = useState(false);
 
   const disablePlaylistAdding = async () =>
-    await fetch("/api/v1/remove_playlist");
+    await fetch("/api/v1/remove_playlist", {
+      method: "PATCH",
+      credentials: "same-origin",
+      headers: {
+        "CSRF-Token": csrfToken,
+      },
+    });
 
   const enablePlaylistAdding = async (selected) =>
     await fetch("/api/v1/set_playlist", {
+      credentials: "same-origin",
       method: "POST",
       headers: {
+        "CSRF-Token": csrfToken,
         Accept: "application/json",
         "Content-Type": "application/json",
       },

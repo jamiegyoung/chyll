@@ -26,4 +26,4 @@ COPY --from=app /usr/src/app/build/ /usr/src/chyll/public/
 RUN  mv ./public/index.html ./private/
 
 EXPOSE 3000
-CMD ["yarn", "start"]
+CMD ["yarn", "start", "--production"]

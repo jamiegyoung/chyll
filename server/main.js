@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
 const helmet = require("helmet");
 const path = require("path");
@@ -36,8 +37,13 @@ const frontEndLimiter = rateLimit({
   max: 60,
 });
 
+app.use(cookieParser());
+
 const csrfMiddleware = csurf({
-  cookie: false,
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+  },
 });
 
 app.use(csrfMiddleware);
@@ -59,7 +65,8 @@ app.get("/", frontEndLimiter, (_req, res) => {
   res.redirect("/home");
 });
 
-app.get("/home", frontEndLimiter, checkAccess, (_req, res) => {
+app.get("/home", frontEndLimiter, checkAccess, (req, res) => {
+  res.cookie("CSRF-Token", req.csrfToken());
   res.sendFile(path.join(__dirname, "private", "index.html"));
 });
 

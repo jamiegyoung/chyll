@@ -16,13 +16,14 @@ const apiLimiter = rateLimit({
 const spotify = {
   client_id: process.env.SPOTIFY_CLIENT_ID,
   client_secret: process.env.SPOTIFY_CLIENT_SECRET,
+  callback_uri: process.env.SPOTIFY_CALLBACK_URL,
 };
 
 const getPlaylists = async (userId, accessToken, refreshToken) => {
   const loggedInClient = new SpotifyClient(
     spotify.client_id,
     spotify.client_secret,
-    "https://jamieyoung.tech/api/v1/callback"
+    spotify.callback_uri
   );
 
   await loggedInClient.setTokens(accessToken, refreshToken);
@@ -45,7 +46,7 @@ router.get("/submit_login", apiLimiter, async (req, res) => {
   const spotifyClient = new SpotifyClient(
     spotify.client_id,
     spotify.client_secret,
-    "https://jamieyoung.tech/api/v1/callback"
+    spotify.callback_uri
   );
 
   const state = uuidv4();
@@ -61,7 +62,7 @@ router.get("/callback", apiLimiter, async (req, res) => {
   const loggedInClient = new SpotifyClient(
     spotify.client_id,
     spotify.client_secret,
-    "https://jamieyoung.tech/api/v1/callback"
+    spotify.callback_uri
   );
 
   loggedInClient.setAuthorizationCode(req.query.code);
@@ -100,7 +101,10 @@ router.use(express.json());
 
 router.post("/set_playlist", apiLimiter, checkAccess, async (req, res) => {
   if (req.body) {
-    if (!req.body.value) return;
+    if (!req.body.value) {
+      res.sendStatus(403);
+      return;
+    }
     const playlistFound = (
       await getPlaylists(
         req.session.userId,
@@ -118,7 +122,7 @@ router.post("/set_playlist", apiLimiter, checkAccess, async (req, res) => {
   res.sendStatus(403);
 });
 
-router.get("/remove_playlist", apiLimiter, checkAccess, (req, res) => {
+router.patch("/remove_playlist", apiLimiter, checkAccess, (req, res) => {
   db.setUserPlaylist(req.session.userId, null);
   res.sendStatus(200);
 });
