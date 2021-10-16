@@ -34,11 +34,11 @@ const startDailyCheck = async () => {
           allPlaylists[i].playlist_id,
           allPlaylists[i].user_id
         );
-      }, 1000 * i);
+      }, 5000 * i);
     }
   });
   // Removed invoke for release
-  // this.dailyCheck.invoke();
+  this.dailyCheck.invoke();
 };
 
 module.exports = { startDailyCheck };

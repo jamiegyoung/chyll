@@ -1,5 +1,5 @@
 const SpotifyWebApi = require("spotify-web-api-node");
-const { removeUser } = require("./database");
+const { removeUser, updateUser } = require("./database");
 
 const scope = [
   "playlist-read-collaborative",
@@ -101,12 +101,13 @@ class SpotifyClient {
     return new Promise((resolve, reject) => {
       this.spotifyApi
         .refreshAccessToken()
-        .then((res) => {
+        .then(async (res) => {
+          console.log("refreshing access token");
           this.spotifyApi.setAccessToken(res.body.access_token);
+          updateUser(await this.getID(), res.body.access_token, this.getRefreshToken());
           resolve(true);
         })
         .catch((e) => {
-          
           console.log("refreshing access token failed");
           reject(e);
         });
