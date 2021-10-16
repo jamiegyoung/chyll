@@ -32,3 +32,13 @@
   display: flex;
   justify-content: center;
 }
+
+.errorText {
+  background-color: #d83a3a;
+  padding: 10px;
+  border-radius: 5px;
+  border: 3px solid rgb(22, 22, 22);
+  transition: all .2s ease-in-out;
+  position: absolute;
+  top: 75%;
+}

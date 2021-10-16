@@ -38,7 +38,7 @@ const startDailyCheck = async () => {
     }
   });
   // Removed invoke for release
-  this.dailyCheck.invoke();
+  // this.dailyCheck.invoke();
 };
 
 module.exports = { startDailyCheck };

@@ -13,9 +13,11 @@ const Playlists = () => {
 
   const [selected, setSelected] = useState(null);
   const [enabled, setEnabled] = useState(false);
+  const [hasErrored, setHasErrored] = useState(false);
+  const [errorMessageOpacity, setErrorMessageOpacity] = useState(0);
 
-  const disablePlaylistAdding = async () =>
-    await fetch("/api/v1/remove_playlist", {
+  const disablePlaylistAdding = () =>
+    fetch("/api/v1/remove_playlist", {
       method: "PATCH",
       credentials: "same-origin",
       headers: {
@@ -35,11 +37,13 @@ const Playlists = () => {
       body: JSON.stringify(selected),
     });
 
-  const handleSelectChange = (value) => {
+  const handleSelectChange = async (value) => {
     if (value !== selected) {
-      setEnabled(false);
-      disablePlaylistAdding();
-      setSelected(value);
+      let res = await disablePlaylistAdding();
+      if (res.status === 200) {
+        setEnabled(false);
+        setSelected(value);
+      }
     }
   };
 
@@ -95,12 +99,35 @@ const Playlists = () => {
 
   const handleStartClick = async () => {
     if (!enabled && selected) {
-      await enablePlaylistAdding(selected);
-      return setEnabled(true);
+      let res = await enablePlaylistAdding(selected);
+      if (res.status === 200) return setEnabled(true);
+      handleError();
     }
-    await disablePlaylistAdding();
-    setEnabled(false);
+    let res = await disablePlaylistAdding();
+    if (res.status === 200) return setEnabled(false);
+    handleError();
   };
+
+  const handleError = () => {
+    setHasErrored(true);
+  };
+
+  useEffect(() => {
+    const timeout = () => {
+      if (hasErrored) {
+        setErrorMessageOpacity(1);
+        return setTimeout(() => {
+          setErrorMessageOpacity(0);
+          setTimeout(() => {
+            setHasErrored(false);
+          }, 200);
+        }, 5000);
+      }
+      return;
+    };
+    timeout();
+    return () => clearTimeout(timeout);
+  }, [hasErrored]);
 
   return (
     <div className={styles.outerContainer}>
@@ -137,6 +164,14 @@ const Playlists = () => {
           <span className={commonStyles.avoidwrap}>(17:00 UTC)</span> to a
           playlist of your choosing
         </p>
+        {hasErrored ? (
+          <p
+            className={styles.errorText}
+            style={{ opacity: errorMessageOpacity }}
+          >
+            Something went wrong with that request, please try again
+          </p>
+        ) : null}
       </div>
     </div>
   );
